@@ -19,33 +19,37 @@ Resources:
   WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Enable HTTP for Flask Web Sever an SSH port to secure connection
-      SecurityGroupIngress:
-        - IpProtokol: tcp
+      GroupDescription: Enable HTTP for Flask Web Server and SSH port to secure connection
+      SecurityGroupEgress:
+        - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
-        - IpProtokol: tcp
+        - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
 
-      
   WebServerHost:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !Ref LatestAmiId
       InstanceType: t2.micro
       KeyName: !Ref KeyName
-      SecurityGroupIds: 
+      SecurityGroupIds:
         - !Ref WebServerSecurityGroup
-      Tags: 
+      Tags:
         - Key: Name
           Value: !Sub Web Server of ${AWS::StackName}
       UserData: !Base64 |
-        #! /bin/bash
+        #!/bin/bash
         yum update -y
         yum install python3
         pip3 install flask
         cd /home/ec2-user
+
+
+
+
+
 Outputs:
