@@ -8,19 +8,20 @@ Description: |
   repository, then installed on Flask.
 Parameters:
   KeyName:
-    Description:
+    Description: 
     Type: AWS::EC2::KeyPair::KeyName
 
   LatestAmiId:
-    Type: "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>"
-    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2' 
 
 Resources:
+
   WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Enable HTTP for Flask Web Server and SSH port to secure connection
-      SecurityGroupEgress:
+      GroupDescription: Enable HTTP for flask Web Server and SSH port to secure connection
+      SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
@@ -28,7 +29,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          CidrIp: 0.0.0.0/0
+          CidrIp: 0.0.0.0/0 
 
   WebServerHost:
     Type: AWS::EC2::Instance
@@ -36,20 +37,25 @@ Resources:
       ImageId: !Ref LatestAmiId
       InstanceType: t2.micro
       KeyName: !Ref KeyName
-      SecurityGroupIds:
+      SecurityGroupIds: 
         - !Ref WebServerSecurityGroup
-      Tags:
+      Tags: 
         - Key: Name
-          Value: !Sub Web Server of ${AWS::StackName}
+          Value: !Sub Web Server of ${AWS::StackName} 
       UserData: !Base64 |
         #!/bin/bash
         yum update -y
         yum install python3
         pip3 install flask
         cd /home/ec2-user
+        
 
 
 
 
 
+
+
+
+  
 Outputs:
